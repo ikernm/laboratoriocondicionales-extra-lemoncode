@@ -6,15 +6,26 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="stylesheet" href="/src/style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Dado Aleatorio</title>
   </head>
 
   <body>
 
     <div id="app">
 
-      <h1>Adivina el numero</h1>
+      <h1>El dado de la suerte</h1>
+      <div id="botones">
+        <button id="tirar-dado">¡Tira el dado!</button>
+        <button id="me-planto">Me planto</button>
+      </div>
       
+      <div id="imagen-dado">
+        <img id="dado" alt="dado aleatorio" src="" />
+      </div>
+
+      <div id="puntuacion-dados"></div>
+      <div id="mensaje-dados"></div>
+
     </div>
 
     <script type="module" src="/src/main.ts"></script>

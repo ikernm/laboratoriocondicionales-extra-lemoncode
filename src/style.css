@@ -43,6 +43,10 @@ h1 {
   text-align: center;
 }
 
+.imagen-dado {
+  padding: 12px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

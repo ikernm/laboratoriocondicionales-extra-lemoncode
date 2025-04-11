@@ -43,10 +43,6 @@ h1 {
   text-align: center;
 }
 
-.imagen-dado {
-  padding: 12px;
-}
-
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -85,6 +81,25 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+#imagen-dado {
+  padding: 30px;
+}
+
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.boton {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.boton:active {
+  transform: scale(0.9);
 }
 
 @media (prefers-color-scheme: light) {

@@ -2,95 +2,104 @@ import "./style.css";
 
 const generarNumeroAleatorio = (): number => Math.floor(Math.random()* 6) + 1;
 
-const botonTirarDado = document.getElementById("tirar-dado");
-const botonPlantar = document.getElementById("me-planto");
+let puntos = 0;
 
-const imagenDado = document.getElementById("dado");
-const mensajeDado = document.getElementById("mensaje-dado");
-const puntuacionDado = document.getElementById("puntuacion-dado");
+ const botonTirarDado = document.getElementById("tirar-dado");
+ const botonPlantarse = document.getElementById("me-planto");
+ const elementoImagen = document.getElementById("dado");
+ const elementoDivPuntuacion = document.getElementById("puntuacion-dado");
+ const elementoDivMensaje = document.getElementById("mensaje-dado");
 
-    // Le asignamos el valor máximo de puntos y el valor inicial de puntos
-    const MAXIMO_PUNTOS = 50;
-    let puntos = 0;
+ const obtenerUrlDado = (numeroDado:number) => {
 
-// Definimos los estados posibles del juego
-type Estado =
- | "NO_ES_EL_NUMERO_6"
- | "ES_EL_NUMERO_6"
- | "MAXIMO_PUNTOS"
- | "ME_PLANTO";
-
-const elementoMensaje = (texto: string, estado: Estado) => {
-
-    if(mensajeDado && mensajeDado instanceof HTMLDivElement &&
-        puntuacionDado && puntuacionDado instanceof HTMLDivElement &&
-        imagenDado && imagenDado instanceof HTMLImageElement) {
-     
-        let mensaje: string = texto;
-        
-        // Generamos un número aleatorio entre 1 y 6
-        const numeroAleatorio = generarNumeroAleatorio();
-
-        // Cambiamos la imagen del dado según el número aleatorio y le añadimos el alt
-        imagenDado.src = `./src/images/cara${numeroAleatorio}.png`;
-        imagenDado.alt = `Cara ${numeroAleatorio}`;
-
-        // Cambiamos el texto de la puntuación
-        puntuacionDado.innerHTML = `Puntuación: ${puntos}`;
-        mensajeDado.innerHTML = mensaje;
-
-        switch (estado) {
-
-            case "NO_ES_EL_NUMERO_6":
-                if(numeroAleatorio !== 6) {
-                mensaje =`Has sacado un ${numeroAleatorio}, has obtenido 10 puntos. Sigue tirando para obtener más de 50 puntos`;
-                puntos += 10;
-                }
-                break;
-
-            case "ES_EL_NUMERO_6":
-                if(numeroAleatorio == 6) {
-                mensaje = `Has sacado un ${numeroAleatorio}, has perdido todos los puntos`;
-                puntos = 0;
-                }
-                break;
-
-            case "MAXIMO_PUNTOS":
-                if(puntos >= MAXIMO_PUNTOS) {
-                mensaje = `Tus puntos actuales son ${puntos}, que son mayores a 50, por tanto, has ganado`;
-                }
-                break;
-
-            case "ME_PLANTO":
-                mensaje = `Te has plantado con ${puntos} puntos`;
-                break;
-
-            default:
-                mensaje = `Error: ${estado}`;
-                break;
-        }
+    switch(numeroDado) {
+        case 1:
+            return "src/images/cara1.png";
+        case 2:
+            return "src/images/cara2.png";
+        case 3:
+            return "src/images/cara3.png";
+        case 4:
+            return "src/images/cara4.png";
+        case 5:
+            return "src/images/cara5.png";
+        case 6:
+            return "src/images/cara6.png";
+        default:
+            return "";
     }
 }
 
-// Llamamos a la función de hacerle click al botón de ¡Tira el dado!
+const mostrarUrlDado = (urlDado:string) => {
+    if (elementoImagen && elementoImagen instanceof HTMLImageElement) {
+        elementoImagen.src = urlDado;
+    }
+}
+
+const mostrarPuntuacion = (puntosTotales:number) => {
+    if (elementoDivPuntuacion && elementoDivPuntuacion instanceof HTMLDivElement) {
+        elementoDivPuntuacion.textContent = puntosTotales.toString()
+    }
+}
+
+const sumarPuntos = (numeroDado: number): number => {
+    if (numeroDado === 6) {
+        return puntos=0;
+    } else {
+        puntos += 10;
+        return puntos;
+    }
+}
+
+const actualizarPuntos = (puntosSumados:number) => {
+    puntos = puntosSumados;
+}
+
+const GanarJuego = (puntosSumados: number, numeroDado: number) => {
+    if (elementoDivMensaje && elementoDivMensaje instanceof HTMLDivElement 
+        && elementoDivPuntuacion && elementoDivPuntuacion instanceof HTMLDivElement) {
+
+    if (puntosSumados >= 50) {
+        if (numeroDado === 6) {
+            puntosSumados = 0;
+            elementoDivMensaje.textContent = `Has perdido el juego después de superar los 50 puntos`;
+            elementoDivPuntuacion.style.display = "none";
+        } else {
+            elementoDivMensaje.textContent = `Has ganado el juego con ${puntosSumados} puntos`;
+            elementoDivPuntuacion.style.display = "none";
+        }
+    } else { 
+            elementoDivMensaje.textContent = `Sigue tirando para obtener más de 50 puntos`;
+            elementoDivPuntuacion.style.display = "block";
+    }      
+   } 
+ }
+
+const botonesInactivos = () => {
+    if (botonTirarDado && botonTirarDado instanceof HTMLButtonElement && botonPlantarse && botonPlantarse instanceof HTMLButtonElement) {
+        botonPlantarse.disabled = true;
+        botonTirarDado.disabled = true;
+    }
+}
+
+const tirarDado = () => {
+    const numeroDado = generarNumeroAleatorio();
+    const urlDado = obtenerUrlDado(numeroDado);
+    mostrarUrlDado(urlDado);  
+    const puntosSumados = sumarPuntos(numeroDado);
+    actualizarPuntos(puntosSumados);
+    mostrarPuntuacion(puntos);
+    GanarJuego(puntosSumados, numeroDado);    
+}
+
+const plantarse = () => {
+    botonesInactivos();
+}
 
 if (botonTirarDado && botonTirarDado instanceof HTMLButtonElement) {
-    botonTirarDado.addEventListener("click", () => {
-        generarNumeroAleatorio();
-        elementoMensaje(texto,estado);
-    });
+    botonTirarDado.addEventListener("click", tirarDado)
 }
 
-// Llamamos a la función de hacerle click al botón de ¡Me planto!
-
-if(botonPlantar && botonPlantar instanceof HTMLButtonElement &&
-    botonTirarDado && botonTirarDado instanceof HTMLButtonElement) {
-
-    botonPlantar.addEventListener("click", () => {
-        elementoMensaje(mensaje,"ME_PLANTO");
-        botonPlantar.disabled = true;
-        botonTirarDado.disabled = true;
-    });
+if(botonPlantarse && botonPlantarse instanceof HTMLButtonElement && botonTirarDado && botonTirarDado instanceof HTMLButtonElement) {
+    botonPlantarse.addEventListener("click", (plantarse))
 }
-
-

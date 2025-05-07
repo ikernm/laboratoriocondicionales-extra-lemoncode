@@ -42,12 +42,22 @@ const mostrarPuntuacion = (puntosTotales:number) => {
     }
 }
 
+const mostrarMensaje = (mensaje:string, display:string) => {
+    const elementoDivPuntuacion = document.getElementById("puntuacion-dado");
+    const elementoDivMensaje = document.getElementById("mensaje-dado");
+
+    if (elementoDivMensaje && elementoDivMensaje instanceof HTMLDivElement 
+        && elementoDivPuntuacion && elementoDivPuntuacion instanceof HTMLDivElement) {
+            elementoDivMensaje.textContent = mensaje;
+            elementoDivPuntuacion.style.display = display;
+    }
+}
+
 const sumarPuntos = (numeroDado: number): number => {
     if (numeroDado === 6) {
-        return puntos=0;
+        return 0;
     } else {
-        puntos += 10;
-        return puntos;
+        return puntos + 10;
     }
 }
 
@@ -61,16 +71,12 @@ const GanarJuego = (puntosSumados: number, numeroDado: number) => {
 
     if (puntosSumados >= 50) {
         if (numeroDado === 6) {
-            puntosSumados = 0;
-            elementoDivMensaje.textContent = `Has perdido el juego después de superar los 50 puntos`;
-            elementoDivPuntuacion.style.display = "none";
+            mostrarMensaje("Has perdido el juego después de superar los 50 puntos", 'none'); 
         } else {
-            elementoDivMensaje.textContent = `Has ganado el juego con ${puntosSumados} puntos`;
-            elementoDivPuntuacion.style.display = "none";
+            mostrarMensaje(`Has ganado el juego con ${puntosSumados} puntos`, 'none');    
         }
     } else { 
-            elementoDivMensaje.textContent = `Sigue tirando para obtener más de 50 puntos`;
-            elementoDivPuntuacion.style.display = "block";
+            mostrarMensaje("Sigue tirando para obtener más de 50 puntos",'block');
     }      
    } 
  }
@@ -101,5 +107,5 @@ if (botonTirarDado && botonTirarDado instanceof HTMLButtonElement) {
 }
 
 if(botonPlantarse && botonPlantarse instanceof HTMLButtonElement && botonTirarDado && botonTirarDado instanceof HTMLButtonElement) {
-    botonPlantarse.addEventListener("click", (plantarse))
+    botonPlantarse.addEventListener("click", plantarse)
 }

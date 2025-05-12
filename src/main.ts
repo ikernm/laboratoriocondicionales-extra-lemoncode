@@ -65,28 +65,26 @@ const actualizarPuntos = (puntosSumados:number) => {
     puntos = puntosSumados;
 }
 
-const GanarJuego = (puntosSumados: number, numeroDado: number) => {
-    if (elementoDivMensaje && elementoDivMensaje instanceof HTMLDivElement 
-        && elementoDivPuntuacion && elementoDivPuntuacion instanceof HTMLDivElement) {
-
-    if (puntosSumados >= 50) {
-        if (numeroDado === 6) {
-            mostrarMensaje("Has perdido el juego después de superar los 50 puntos", 'none'); 
-        } else {
-            mostrarMensaje(`Has ganado el juego con ${puntosSumados} puntos`, 'none');    
-        }
-    } else { 
-            mostrarMensaje("Sigue tirando para obtener más de 50 puntos",'block');
-    }      
-   } 
- }
-
 const botonesInactivos = () => {
     if (botonTirarDado && botonTirarDado instanceof HTMLButtonElement && botonPlantarse && botonPlantarse instanceof HTMLButtonElement) {
         botonPlantarse.disabled = true;
         botonTirarDado.disabled = true;
     }
 }
+
+const GanarJuego = (puntosSumados: number, numeroDado: number) => {
+    if (elementoDivMensaje && elementoDivMensaje instanceof HTMLDivElement 
+        && elementoDivPuntuacion && elementoDivPuntuacion instanceof HTMLDivElement) {
+    
+    if (numeroDado === 6) {
+        mostrarMensaje("Has perdido el juego", 'none');
+        botonesInactivos();
+    } else if (puntosSumados >= 50) {
+        mostrarMensaje(`Has ganado el juego con ${puntosSumados} puntos`, 'none');
+        botonesInactivos();
+    } 
+   } 
+ }
 
 const tirarDado = () => {
     const numeroDado = generarNumeroAleatorio();
